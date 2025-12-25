@@ -24,13 +24,6 @@ const update = (id, data) => {
     return products[index];
 };
 
-const updatePartial = (id, data) => {
-    const index = products.findIndex(p => p.id === id);
-    if (index === -1) return null;
-    products[index] = { ...products[index], ...data };
-    return products[index];
-};
-
 const remove = (id) => {
     const index = products.findIndex(p => p.id === id);
     if (index === -1) return false;
@@ -44,6 +37,5 @@ module.exports = {
     findAll,
     findById,
     update,
-    updatePartial,
     remove
 };
