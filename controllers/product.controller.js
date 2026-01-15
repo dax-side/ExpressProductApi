@@ -58,6 +58,5 @@ module.exports = {
     getAllProducts,
     getProductById,
     updateProduct,
-    partialUpdateProduct,
     deleteProduct
 };
