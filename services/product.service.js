@@ -1,39 +1,46 @@
-let products = [];
-let nextId = 1;
+const Product = require('../models/product.model');
 
-const create = (data) => {
-    const newProduct = { id: nextId++, ...data };
-    products.push(newProduct);
+const create = async (data) => {
+    const newProduct = new Product({
+        name: data.name,
+        price: data.price,
+        description: data.description,
+        imageUrl: data.imageUrl || null
+    });
+    await newProduct.save();
     return newProduct;
 };
 
-const createWithId = (id, data) => {
-    const newProduct = { id, name: data.name, price: data.price, description: data.description };
-    products.push(newProduct);
-    return newProduct;
+const findAll = async () => {
+    return await Product.find();
 };
 
-const findAll = () => products;
-
-const findById = (id) => products.find(p => p.id === id);
-
-const update = (id, data) => {
-    const index = products.findIndex(p => p.id === id);
-    if (index === -1) return null;
-    products[index] = { id, ...data };
-    return products[index];
+const findById = async (id) => {
+    return await Product.findById(id);
 };
 
-const remove = (id) => {
-    const index = products.findIndex(p => p.id === id);
-    if (index === -1) return false;
-    products.splice(index, 1);
-    return true;
+const update = async (id, data) => {
+    const updateFields = {};
+    if (data.name !== undefined) updateFields.name = data.name;
+    if (data.price !== undefined) updateFields.price = data.price;
+    if (data.description !== undefined) updateFields.description = data.description;
+    if (data.imageUrl !== undefined) updateFields.imageUrl = data.imageUrl;
+
+    const product = await Product.findByIdAndUpdate(
+        id,
+        updateFields,
+        { new: true }
+    );
+    return product;
+};
+
+const remove = async (id) => {
+    const result = await Product.findByIdAndDelete(id);
+    return result !== null;
 };
 
 module.exports = {
     create,
-    createWithId,
     findAll,
     findById,
     update,
