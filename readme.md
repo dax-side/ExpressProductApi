@@ -1,54 +1,85 @@
 # Product API
 
-This Express.js API lets you manage products.
+Backend API for managing products with user authentication, image uploads, and external data fetching.
 
-## Endpoints
+## Setup
+```bash
+npm install
+npm start
+```
+Runs on `http://localhost:1888`
 
-### Create a Product
-- **Method**: POST
-- **URL**: `http://localhost:1888/products`
-- **Body** (JSON):
-  ```json
-  {
-    "name": "Wireless Headphones",
-    "price": 150,
-    "description": "Comfortable over-ear headphones with noise cancellation"
-  }
-  ```
-- **Response**: Returns 201 with the new product.
+---
+
+## Authentication
+
+### Register
+**POST** `/auth/register`
+```json
+{
+  "email": "user@test.com",
+  "password": "Password123!",
+  "role": "admin"
+}
+```
+Leave `role` empty for regular user access. Password requires 8+ characters with uppercase, lowercase, number, and special character.
+
+### Login
+**POST** `/auth/login`
+```json
+{
+  "email": "user@test.com",
+  "password": "Password123!"
+}
+```
+Returns a JWT token. Add it to the Authorization header as `Bearer <token>` for protected routes.
+
+---
+
+## Products
+
+Products require authentication. Admin role needed for create, update, and delete operations.
+
+### Create Product
+**POST** `/products` (form-data)
+- `name` = "Laptop"
+- `price` = 1500
+- `description` = "Gaming laptop"
+- `image` = file upload (optional)
+
+Images get uploaded to Cloudinary. Response includes the imageUrl.
 
 ### Get All Products
-- **Method**: GET
-- **URL**: `http://localhost:1888/products`
-- **Response**: Returns 200 with the list of products.
+**GET** `/products`
 
 ### Get Product by ID
-- **Method**: GET
-- **URL**: `http://localhost:1888/products/{id}`
-- **Example**: `http://localhost:1888/products/1`
-- **Response**: Returns 200 with the product or 404 if it does not exist.
+**GET** `/products/{id}`
 
 ### Update Product
-- **Method**: PUT
-- **URL**: `http://localhost:1888/products/{id}`
-- **Body** (JSON): Include the fields you want to change.
-- **Example**: `http://localhost:1888/products/1` with body:
-  ```json
-  {
-    "name": "Updated Headphones",
-    "price": 160,
-    "description": "Updated description"
-  }
-  ```
-- **Response**: Returns 200 with the updated product or 404 if not found.
+**PUT** `/products/{id}`
+```json
+{
+  "name": "Updated Laptop",
+  "price": 1600,
+  "description": "Updated description"
+}
+```
 
 ### Delete Product
-- **Method**: DELETE
-- **URL**: `http://localhost:1888/products/{id}`
-- **Example**: `http://localhost:1888/products/1`
-- **Response**: Returns 200 if deleted or 404 if not found.
+**DELETE** `/products/{id}`
 
-## Running the API
-1. Run `npm install` to get the dependencies.
-2. Run `npm start` to start the server.
-3. The server runs on `http://localhost:1888`.
+---
+
+## Todos
+
+Fetches data from JSONPlaceholder and stores it in MongoDB.
+
+### Fetch Todo
+**GET** `/todos/fetch`
+
+Pulls todo data from the external API and saves it locally. No authentication needed.
+
+### Get All Todos
+**GET** `/todos`
+
+Shows all todos saved in the database.
