@@ -1,6 +1,6 @@
 require('dotenv').config({ debug: false });
 const express = require('express');
-const mongoose = require('mongoose');
+const connectDB = require('./config/db');
 const productRoutes = require('./routes/product.routes');
 const authRoutes = require('./routes/auth.routes');
 const todoRoutes = require('./routes/todo.routes');
@@ -8,9 +8,7 @@ const todoRoutes = require('./routes/todo.routes');
 const app = express();
 const PORT = process.env.PORT || 1888;
 
-mongoose.connect(process.env.mongodb_url)
-    .then(() => console.log('MongoDB connected'))
-    .catch(err => console.log('MongoDB connection error:', err));
+connectDB();
 
 app.use(express.json());
 
