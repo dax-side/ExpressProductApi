@@ -60,7 +60,6 @@ const updateProduct = async (req, res) => {
     try {
         const data = req.body;
         
-        // Convert price to number if present
         if (data.price) {
             data.price = Number(data.price);
         }
