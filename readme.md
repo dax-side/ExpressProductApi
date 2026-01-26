@@ -75,9 +75,15 @@ Images get uploaded to Cloudinary. Response includes the imageUrl.
 Fetches data from JSONPlaceholder and stores it in MongoDB.
 
 ### Fetch Todo
-**GET** `/todos/fetch`
+**GET** `/todos/fetch` or **GET** `/todos/fetch/{id}`
 
-Pulls todo data from the external API and saves it locally. No authentication needed.
+Pulls todo data from the external API and saves it locally. Fetches todo 1 by default, or specify any ID (1-200).
+
+Examples:
+- `/todos/fetch` - fetches todo 1
+- `/todos/fetch/5` - fetches todo 5
+
+No authentication needed.
 
 ### Get All Todos
 **GET** `/todos`
